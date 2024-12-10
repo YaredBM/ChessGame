@@ -11,3 +11,5 @@ tener un load
 escoger estilo
 
 seleccionar idioma (español, ingles, aleman, turco)
+
+diseño de idiomas y los botones y cajas de texto.

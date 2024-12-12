@@ -130,7 +130,7 @@ The top of the game window includes a menu bar with these options:
 Modern Aesthetic:
 - Chessboard styles and pieces adapt to the selected theme, ensuring a visually engaging experience.
 
-Game Rules Window
+Game Rules Window:
 
 The game includes a dedicated Game Rules Window, accessible from the top menu bar. This window provides:
 

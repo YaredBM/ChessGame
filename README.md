@@ -75,3 +75,77 @@ movement logic for each type of piece.
 - AI: Implements the AI logic, allowing the computer to make simple strategic decisions.
 - InputHandler: Manages all types of input from the user (mouse, keyboard, voice).
 - UI: Responsible for drawing the board, pieces, menus, and game messages to the screen.
+
+
+## Visual Design
+
+Main Menu
+
+The main menu allows players to customize their gameplay experience with the following options:
+
+1. Game Mode Selection:
+- 1 vs 1: Two players compete on the same device.
+- 1 vs AI: A single player faces an AI opponent.
+- Modes are represented with visually intuitive icons.
+
+2. Style Customization:
+- Choose from four unique chessboard themes:
+Baby: Bright and playful.
+Wood: A classic wooden board design.
+Spooky: A dark and mysterious theme.
+Nightly: A sleek, modern aesthetic.
+- Language Options:
+Supported languages include:
+English
+Spanish
+Turkish
+- Players can select their preferred language using flag icons.
+
+3. In-Game Interface
+
+Interactive Gameplay:
+
+Multiple input methods make the game versatile:
+- Mouse: Traditional click-to-select and move functionality.
+- Voice Assistance: Players can give commands like “Move A2 to A4,” and the system will prompt for confirmation: “Are you sure you want to move A2 to A4?”
+- Keyboard Instructions: Players can input moves using specific keyboard commands, providing an alternative to voice and mouse interaction.
+
+The game highlights valid moves when a piece is selected, ensuring clarity during gameplay.
+
+Turn Indication:
+
+Turns are displayed in the format (1. W1 ; B2.), where:
+- W represents White’s move.
+- B represents Black’s move.
+- The number indicates the turn sequence.
+
+Top Menu Bar:
+
+The top of the game window includes a menu bar with these options:
+- Home: Return to the game’s main interface.
+- Main Menu: Navigate back to the main menu for customization or to start a new game.
+- Game Rules: Access detailed chess rules and gameplay instructions.
+- Exit: Close the game.
+
+Modern Aesthetic:
+- Chessboard styles and pieces adapt to the selected theme, ensuring a visually engaging experience.
+
+Game Rules Window
+
+The game includes a dedicated Game Rules Window, accessible from the top menu bar. This window provides:
+
+- General Rules: Explains the objective of the game and turn-based gameplay.
+- How Each Piece Moves: Detailed descriptions of movement for pawns, rooks, knights, bishops, queens, and kings.
+- Additional Concepts: Key chess concepts like check, checkmate, stalemate, and draw conditions.
+
+All game rules are available in the three supported languages: English, Spanish, and Turkish.
+
+Features and Customizations
+- Cross-Language Support:
+Players can switch between English, Spanish, and Turkish seamlessly.
+- Customizable Board Styles:
+Choose from four unique themes to suit your preferences.
+- Multiple Input Methods:
+Play using mouse, voice commands, or keyboard instructions.
+- Dynamic Visuals:
+The game highlights valid moves and updates themes based on player preferences.

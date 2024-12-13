@@ -149,3 +149,93 @@ Choose from four unique themes to suit your preferences.
 Play using mouse, voice commands, or keyboard instructions.
 - Dynamic Visuals:
 The game highlights valid moves and updates themes based on player preferences.
+
+
+## Chess Game Main Menu Implementation
+
+This script is responsible for creating the main menu of the chess game. It provides players with an interactive and visually appealing 
+interface to customize their gameplay experience. The main menu allows players to configure game settings such as game mode, board 
+style, and language before starting the game.
+
+Features
+
+1. Game Mode Selection:
+
+Players can choose between:
+- 1 vs 1: Two players compete on the same device.
+- 1 vs AI: A single player competes against an AI opponent.
+
+Each mode is represented by an image for easy selection.
+
+2. Style Customization:
+
+Players can select from four unique chessboard styles:
+- Baby: A bright and playful design.
+- Wood: A classic wooden look.
+- Spooky: A dark and mysterious theme.
+- Nightly: A sleek and modern aesthetic.
+
+Styles are shown with preview images, allowing players to visualize their choice.
+
+3. Language Selection:
+
+The game supports three languages:
+- English
+- Spanish
+- Turkish
+
+Players can select their preferred language by clicking on flag icons.
+
+4. Start Game Functionality:
+
+Once all selections are made, clicking the "Play" button launches the chess game script (Chess_copy.pyw).
+
+If any selection is missing, a warning message prompts the player to complete the required choices.
+
+5. Enhanced User Interface:
+
+The menu is designed to be fullscreen and uses a consistent theme (#4A646C as the background color) to ensure a polished appearance.
+
+Decorative corner images and responsive button designs enhance the overall user experience.
+
+
+How the Code Works
+
+Asset Management:
+- Images for game modes, board styles, and languages are loaded dynamically from the assets folder. File paths are handled using the os
+module to ensure compatibility across different operating systems.
+
+Interactive Widgets:
+- The menu uses Tkinter widgets such as Radiobutton, Label, and Frame to create a clean and interactive layout.
+- Buttons are configured to display images, making the interface intuitive and visually engaging.
+
+Error Handling:
+- The start_game function ensures that players cannot start the game without selecting all required options (mode, style, and
+language). Missing selections trigger a popup warning using a messagebox.
+
+Launching the Game:
+- Once selections are complete, the start_game function closes the main menu and launches the chess game (Chess_copy.pyw) using
+subprocess.Popen.
+
+
+Key Components of the Code
+
+Functions
+
+1. start_game():
+- Validates user selections (mode, style, language).
+- Closes the main menu and launches the chess game script if all selections are valid.
+
+2. main_menu():
+- Initializes the main menu window and sets up the GUI components:
+- Game mode, style, and language selection options.
+- A "Play" button for launching the game.
+- Uses Frames, Labels, and Radiobuttons to create a structured and interactive layout.
+
+
+Technologies Used
+
+1. Tkinter: Used for creating the graphical interface and handling user interactions.
+2. Pillow (PIL): Resizes images for buttons and visual elements.
+3. Subprocess: Launches the chess game script in a new process.
+4. OS Module: Dynamically constructs file paths for compatibility across operating systems.

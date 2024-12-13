@@ -226,6 +226,7 @@ Functions
 code: 
 
 def start_game():
+
     """Start the chess game by closing the main menu and opening Chess_copy.pyw."""
     if not selected_mode.get() or not selected_style.get() or not selected_language.get():
         tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
@@ -247,6 +248,7 @@ Key Details:
 Code: 
 
 def main_menu():
+
     """Create and display the main menu."""
     global main_menu_root, selected_mode, selected_style, selected_language
 

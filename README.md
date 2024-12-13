@@ -201,41 +201,99 @@ Decorative corner images and responsive button designs enhance the overall user 
 
 How the Code Works
 
-Asset Management:
+1. Asset Management:
 - Images for game modes, board styles, and languages are loaded dynamically from the assets folder. File paths are handled using the os
 module to ensure compatibility across different operating systems.
 
-Interactive Widgets:
+2. Interactive Widgets:
 - The menu uses Tkinter widgets such as Radiobutton, Label, and Frame to create a clean and interactive layout.
 - Buttons are configured to display images, making the interface intuitive and visually engaging.
 
-Error Handling:
+3. Error Handling:
 - The start_game function ensures that players cannot start the game without selecting all required options (mode, style, and
 language). Missing selections trigger a popup warning using a messagebox.
 
-Launching the Game:
+4. Launching the Game:
 - Once selections are complete, the start_game function closes the main menu and launches the chess game (Chess_copy.pyw) using
 subprocess.Popen.
 
 
-Key Components of the Code
-
 Functions
 
-1. start_game():
-- Validates user selections (mode, style, language).
-- Closes the main menu and launches the chess game script if all selections are valid.
+1. start_game()
+- This function is called when the "Play" button is clicked. It validates the player's selections and launches the chess game:
 
-2. main_menu():
-- Initializes the main menu window and sets up the GUI components:
-- Game mode, style, and language selection options.
-- A "Play" button for launching the game.
-- Uses Frames, Labels, and Radiobuttons to create a structured and interactive layout.
+code: 
+
+def start_game():
+    """Start the chess game by closing the main menu and opening Chess_copy.pyw."""
+    if not selected_mode.get() or not selected_style.get() or not selected_language.get():
+        tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
+        return
+
+    main_menu_root.destroy()  # Close the main menu
+    # Launch Chess_copy.pyw
+    subprocess.Popen(["python", CHESS_COPY_PATH])
+
+
+Key Details:
+- Ensures all options (mode, style, language) are selected. Missing selections prompt a warning.
+- Closes the current menu and starts the game script using subprocess.
+
+
+2. main_menu()
+- This function creates and displays the main menu window, allowing players to select game settings:
+
+Code: 
+
+def main_menu():
+    """Create and display the main menu."""
+    global main_menu_root, selected_mode, selected_style, selected_language
+
+    main_menu_root = tk.Tk()
+    main_menu_root.title("Welcome to Chess")
+    main_menu_root.state("zoomed")  # Fullscreen
+    main_menu_root.configure(bg="#4A646C")  # Set background color
+
+    # Initialize StringVars for selections
+    selected_mode = tk.StringVar()
+    selected_style = tk.StringVar()
+    selected_language = tk.StringVar()
+
+    # Main container for menu options
+    main_container = tk.Frame(main_menu_root, bg="#4A646C")
+    main_container.pack(pady=30)
+
+    # GUI setup for game mode, style, and language options...
+    main_menu_root.mainloop()
+
+
+Key Details:
+- Sets up the main Tkinter window (main_menu_root) with a fullscreen layout and a custom color scheme.
+- Initializes variables for storing player selections.
+- Organizes GUI components for selecting modes, styles, and languages.
+
+
+3. if __name__ == "__main__": main_menu()
+- This statement ensures that the script launches the main menu only when it is executed directly:
+
+Code:
+
+if __name__ == "__main__":
+    main_menu()
+
+
+Key Details:
+- When the script is run directly (e.g., python MainMenu.pyw), it calls the main_menu() function to display the menu interface.
+- If the script is imported into another module, this block is skipped, preventing the menu from launching automatically.
 
 
 Technologies Used
 
 1. Tkinter: Used for creating the graphical interface and handling user interactions.
+
 2. Pillow (PIL): Resizes images for buttons and visual elements.
+
 3. Subprocess: Launches the chess game script in a new process.
+
 4. OS Module: Dynamically constructs file paths for compatibility across operating systems.

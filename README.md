@@ -225,16 +225,16 @@ Functions
 
 code: 
 
-def start_game():
+    def start_game():
 
-    """Start the chess game by closing the main menu and opening Chess_copy.pyw."""
-    if not selected_mode.get() or not selected_style.get() or not selected_language.get():
-        tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
-        return
+        """Start the chess game by closing the main menu and opening Chess_copy.pyw."""
+        if not selected_mode.get() or not selected_style.get() or not selected_language.get():
+            tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
+            return
 
-    main_menu_root.destroy()  # Close the main menu
-    # Launch Chess_copy.pyw
-    subprocess.Popen(["python", CHESS_COPY_PATH])
+        main_menu_root.destroy()  # Close the main menu
+        # Launch Chess_copy.pyw
+        subprocess.Popen(["python", CHESS_COPY_PATH])
 
 
 Key Details:
@@ -247,27 +247,26 @@ Key Details:
 
 Code: 
 
-def main_menu():
+    def main_menu():
+        """Create and display the main menu."""
+        global main_menu_root, selected_mode, selected_style, selected_language
 
-    """Create and display the main menu."""
-    global main_menu_root, selected_mode, selected_style, selected_language
+        main_menu_root = tk.Tk()
+        main_menu_root.title("Welcome to Chess")
+        main_menu_root.state("zoomed")  # Fullscreen
+        main_menu_root.configure(bg="#4A646C")  # Set background color
 
-    main_menu_root = tk.Tk()
-    main_menu_root.title("Welcome to Chess")
-    main_menu_root.state("zoomed")  # Fullscreen
-    main_menu_root.configure(bg="#4A646C")  # Set background color
+        # Initialize StringVars for selections
+        selected_mode = tk.StringVar()
+        selected_style = tk.StringVar()
+        selected_language = tk.StringVar()
 
-    # Initialize StringVars for selections
-    selected_mode = tk.StringVar()
-    selected_style = tk.StringVar()
-    selected_language = tk.StringVar()
+        # Main container for menu options
+        main_container = tk.Frame(main_menu_root, bg="#4A646C")
+        main_container.pack(pady=30)
 
-    # Main container for menu options
-    main_container = tk.Frame(main_menu_root, bg="#4A646C")
-    main_container.pack(pady=30)
-
-    # GUI setup for game mode, style, and language options...
-    main_menu_root.mainloop()
+        # GUI setup for game mode, style, and language options...
+        main_menu_root.mainloop()
 
 
 Key Details:
@@ -281,8 +280,8 @@ Key Details:
 
 Code:
 
-if __name__ == "__main__":
-    main_menu()
+    if __name__ == "__main__":
+        main_menu()
 
 
 Key Details:

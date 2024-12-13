@@ -226,16 +226,11 @@ Functions
 code: 
 
     def start_game():
-
-        """Start the chess game by closing the main menu and opening Chess_copy.pyw."""
         if not selected_mode.get() or not selected_style.get() or not selected_language.get():
             tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
             return
-
-        main_menu_root.destroy()  # Close the main menu
-        # Launch Chess_copy.pyw
+        main_menu_root.destroy()
         subprocess.Popen(["python", CHESS_COPY_PATH])
-
 
 Key Details:
 - Ensures all options (mode, style, language) are selected. Missing selections prompt a warning.
@@ -248,31 +243,18 @@ Key Details:
 Code: 
 
     def main_menu():
-        """Create and display the main menu."""
-        global main_menu_root, selected_mode, selected_style, selected_language
-
+        global main_menu_root, selected_mode, selected_style, selected_language # Create and display the main menu.
         main_menu_root = tk.Tk()
         main_menu_root.title("Welcome to Chess")
-        main_menu_root.state("zoomed")  # Fullscreen
-        main_menu_root.configure(bg="#4A646C")  # Set background color
-
-        # Initialize StringVars for selections
-        selected_mode = tk.StringVar()
-        selected_style = tk.StringVar()
-        selected_language = tk.StringVar()
-
-        # Main container for menu options
-        main_container = tk.Frame(main_menu_root, bg="#4A646C")
-        main_container.pack(pady=30)
-
-        # GUI setup for game mode, style, and language options...
-        main_menu_root.mainloop()
+        main_menu_root.state("zoomed") # Fullscreen
+        selected_mode, selected_style, selected_language = tk.StringVar(), tk.StringVar(), tk.StringVar()     
+        main_menu_root.mainloop() # GUI setup for game mode, style, and language options...
 
 
 Key Details:
-- Sets up the main Tkinter window (main_menu_root) with a fullscreen layout and a custom color scheme.
-- Initializes variables for storing player selections.
-- Organizes GUI components for selecting modes, styles, and languages.
+- Initializes the main menu as a fullscreen window.
+- Stores player selections in selected_mode, selected_style, and selected_language variables.
+- Runs the menu in a loop to handle user interactions.
 
 
 3. if __name__ == "__main__": main_menu()

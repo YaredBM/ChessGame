@@ -1,209 +1,189 @@
-import os
 import tkinter as tk
 from PIL import Image, ImageTk
-from tkinter import messagebox
 import subprocess
+import os
+from tkinter import messagebox
+import sys
+from tkinter import simpledialog
 
-# Define base paths for assets
-BASE_DIR = os.path.dirname(__file__)
-ASSETS_DIR = os.path.join(BASE_DIR, "assets")
-CHESSBOARDS_DIR = os.path.join(ASSETS_DIR, "images", "Chessboards")
-LANGUAGES_DIR = os.path.join(ASSETS_DIR, "images", "Languages")
-GENERAL_IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
-CHESS_COPY_PATH = os.path.join(BASE_DIR, "Chess_copy.pyw")
+# Base directory for dynamic paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSETS_DIR = os.path.join(BASE_DIR, "assets", "Menu")
+
+# def start_game():
+#     """Start the game."""
+#     if not selected_mode.get() or not selected_style.get() or not selected_language.get():
+#         tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
+#         return
+#     main_menu_root.destroy()
+#     subprocess.Popen(["python", os.path.join(BASE_DIR, "Chess_copy.pyw"), selected_style.get()])
 
 def start_game():
-    """Start the chess game by closing the main menu and opening Chess_copy.pyw."""
+    """Start the game."""
     if not selected_mode.get() or not selected_style.get() or not selected_language.get():
         tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
         return
 
-    main_menu_root.destroy()  # Close the main menu
-    # Launch Chess_copy.pyw
-    subprocess.Popen(["python", CHESS_COPY_PATH])
+    # Show name input window based on selected mode
+    get_player_names(selected_mode.get())
+
+def get_player_names(mode):
+    """Open a custom window to get player names based on the game mode."""
+    def submit_names():
+        # Get entered names
+        p1_name = player1_entry.get().strip()
+        p2_name = player2_entry.get().strip() if mode == "1 VS 1" else "AI"
+
+        if not p1_name or (mode == "1 VS 1" and not p2_name):
+            tk.messagebox.showwarning("Missing Names", "Please fill in all the fields!")
+            return
+
+        # Close the name input window
+        name_window.destroy()
+
+        # Start the game with names, style, and language
+        main_menu_root.destroy()
+        subprocess.Popen([
+            "python",
+            os.path.join(BASE_DIR, "Chess.pyw"),
+            selected_style.get(),
+            p1_name,
+            p2_name,
+            selected_language.get()
+        ])
+    # Create the name input window
+    name_window = tk.Toplevel(main_menu_root)
+    name_window.title("Enter Player Names")
+    icon_path = os.path.join(BASE_DIR, "assets", "Menu", "Chess-Logo.ico")
+    name_window.iconbitmap(icon_path)
+
+    # Define window dimensions
+    window_width = 400
+    window_height = 300
+
+    # Center the window
+    screen_width = name_window.winfo_screenwidth()
+    screen_height = name_window.winfo_screenheight()
+    x_position = (screen_width // 2) - (window_width // 2)
+    y_position = (screen_height // 2) - (window_height // 2)
+    name_window.geometry(f"{window_width}x{window_height}+{x_position}+{y_position}")
+    name_window.configure(bg="#4A646C")
+
+    # Titles
+    tk.Label(name_window, text="Enter Player Names", font=("Arial", 20, "bold"), bg="#4A646C", fg="white").pack(pady=10)
+
+    # Player 1 Name Entry
+    tk.Label(name_window, text="Player 1 Name:", font=("Arial", 14), bg="#4A646C", fg="white").pack(pady=5)
+    player1_entry = tk.Entry(name_window, font=("Arial", 14))
+    player1_entry.pack(pady=5)
+
+    # Player 2 Name Entry (if applicable)
+    if mode == "1 VS 1":
+        tk.Label(name_window, text="Player 2 Name:", font=("Arial", 14), bg="#4A646C", fg="white").pack(pady=5)
+        player2_entry = tk.Entry(name_window, font=("Arial", 14))
+        player2_entry.pack(pady=5)
+    else:
+        player2_entry = None
+
+    # Confirm Button
+    tk.Button(name_window, text="Start Game", font=("Arial", 14, "bold"), bg="#E87A59", fg="white",
+              command=submit_names).pack(pady=20)
+
 
 def main_menu():
     """Create and display the main menu."""
     global main_menu_root, selected_mode, selected_style, selected_language
 
+    # Main window
     main_menu_root = tk.Tk()
     main_menu_root.title("Welcome to Chess")
-    main_menu_root.state("zoomed")  # Fullscreen
-    main_menu_root.configure(bg="#4A646C")  # Set background color
+    main_menu_root.configure(bg="#4A646C")
+    main_menu_root.state("zoomed")
+    icon_path = os.path.join(BASE_DIR, "assets", "Menu", "Chess-Logo.ico")
+    main_menu_root.iconbitmap(icon_path)
 
-    # Initialize StringVars for selections
+    # Initialize variables
     selected_mode = tk.StringVar()
     selected_style = tk.StringVar()
     selected_language = tk.StringVar()
 
-    # Main container for menu options
+    # Main frame
     main_container = tk.Frame(main_menu_root, bg="#4A646C")
-    main_container.pack(pady=30)
+    main_container.pack(expand=True)
 
-    # Welcome text
-    welcome_label = tk.Label(
-        main_container,
-        text="Welcome to Chess",
-        font=("Arial", 36, "bold"),
-        bg="#4A646C",
-        fg="white",
-    )
-    welcome_label.pack(pady=10)
+    # Title
+    tk.Label(main_container, text="Welcome to Chess", font=("Arial", 45, "bold"), bg="#4A646C", fg="white").pack(pady=20)
 
-    # Game mode selection
-    mode_label = tk.Label(
-        main_container,
-        text="Choose your game mode:",
-        font=("Arial", 18, "bold"),
-        bg="#4A646C",
-        fg="white",
-    )
-    mode_label.pack(pady=5)
-
+    # Game Mode
+    tk.Label(main_container, text="Choose your game mode:", font=("Arial", 19, "bold"), bg="#4A646C", fg="white").pack(pady=10)
     mode_frame = tk.Frame(main_container, bg="#4A646C")
-    mode_frame.pack(pady=5)
+    mode_frame.pack()
 
-    # Load images for game modes
-    mode_images = {
-        "1 VS 1": os.path.join(GENERAL_IMAGES_DIR, "1vs1.png"),
-        "1 VS AI": os.path.join(GENERAL_IMAGES_DIR, "1vsAI.png"),
-    }
-    for mode, path in mode_images.items():
-        img = Image.open(path).resize((150, 100), Image.Resampling.LANCZOS)
+    for mode, file in [("1 VS 1", "1vs1.png"), ("1 VS AI", "1vsAI.png")]:
+        img_path = os.path.join(ASSETS_DIR, file)
+        img = Image.open(img_path).resize((230, 130), Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(img)
+        btn = tk.Radiobutton(mode_frame, image=img, variable=selected_mode, value=mode, indicatoron=False,
+                             bg="#4A646C", selectcolor="#4A646C", borderwidth=0)
+        btn.image = img
+        btn.pack(side="left", padx=10)
 
-        button = tk.Radiobutton(
-            mode_frame,
-            image=img,
-            variable=selected_mode,
-            value=mode,
-            bg="#4A646C",
-            indicatoron=False,
-            selectcolor="#4A646C",
-        )
-        button.image = img
-        button.pack(side="left", padx=20)
-
-    # Style selection
-    style_label = tk.Label(
-        main_container,
-        text="Choose your style:",
-        font=("Arial", 18, "bold"),
-        bg="#4A646C",
-        fg="white",
-    )
-    style_label.pack(pady=5)
-
+    # Styles
+    tk.Label(main_container, text="Choose your style:", font=("Arial", 19, "bold"), bg="#4A646C", fg="white").pack(pady=10)
     style_frame = tk.Frame(main_container, bg="#4A646C")
-    style_frame.pack(pady=5)
+    style_frame.pack()
 
-    styles = [("Baby", "baby.png"), ("Wood", "wood.png"), ("Spooky", "spooky.png"), ("Nightly", "nightly.png")]
-
-    for style_name, style_image in styles:
-        img = Image.open(os.path.join(CHESSBOARDS_DIR, style_image)).resize((80, 80), Image.Resampling.LANCZOS)
+    for style, file in [("Baby", "baby.png"), ("Wood", "wood.png"), ("Spooky", "spooky.png"), ("Nightly", "nightly.png"), ("Love", "love.png")]:
+        img_path = os.path.join(ASSETS_DIR, file)
+        img = Image.open(img_path).resize((80, 80), Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(img)
+        container = tk.Frame(style_frame, bg="#4A646C")
+        container.pack(side="left", padx=20)
+        tk.Radiobutton(container, image=img, variable=selected_style, value=style, indicatoron=False,
+                       bg="#4A646C", borderwidth=0).pack()
+        container.image = img
+        tk.Label(container, text=style, font=("Arial", 14), bg="#4A646C", fg="white").pack()
 
-        style_container = tk.Frame(style_frame, bg="#4A646C")
-        style_container.pack(side="left", padx=10)
-
-        tk.Radiobutton(
-            style_container,
-            image=img,
-            variable=selected_style,
-            value=style_name,
-            bg="#4A646C",
-            indicatoron=False,
-            selectcolor="#4A646C",
-        ).pack()
-
-        style_container.image = img
-        label = tk.Label(
-            style_container,
-            text=style_name,
-            font=("Arial", 14),
-            bg="#4A646C",
-            fg="white",
-        )
-        label.pack()
-
-    # Language selection
-    language_label = tk.Label(
-        main_container,
-        text="Choose your language:",
-        font=("Arial", 18, "bold"),
-        bg="#4A646C",
-        fg="white",
-    )
-    language_label.pack(pady=5)
-
+    # Language Selection
+    tk.Label(main_container, text="Choose your language:", font=("Arial", 19, "bold"), bg="#4A646C", fg="white").pack(pady=10)
     language_frame = tk.Frame(main_container, bg="#4A646C")
-    language_frame.pack(pady=5)
+    language_frame.pack()
 
-    languages = [("Spanish", "spanish.png"), ("English", "english.png"), ("Turkish", "turkish.png")]
-
-    for language_name, language_flag in languages:
-        img = Image.open(os.path.join(LANGUAGES_DIR, language_flag)).resize((80, 50), Image.Resampling.LANCZOS)
+    for lang, file in [("Spanish", "spanish.png"), ("English", "english.png"), ("Turkish", "turkish.png")]:
+        img_path = os.path.join(ASSETS_DIR, file)
+        img = Image.open(img_path).resize((70, 50), Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(img)
+        container = tk.Frame(language_frame, bg="#4A646C")
+        container.pack(side="left", padx=20)
+        tk.Radiobutton(container, image=img, variable=selected_language, value=lang, indicatoron=False,
+                       bg="#4A646C", borderwidth=0).pack()
+        container.image = img
+        
+    # Play Button
+    play_path = os.path.join(ASSETS_DIR, "play.png")
+    play_img = Image.open(play_path).resize((250, 150), Image.Resampling.LANCZOS)
+    play_img = ImageTk.PhotoImage(play_img)
+    tk.Button(main_container, image=play_img, command=start_game, bg="#4A646C", borderwidth=0).pack(pady=20)
+    main_menu_root.image = play_img  # Prevent garbage collection
+    
+    # Corner Images
+    corner_left_path = os.path.join(ASSETS_DIR, "corner_left.png")
+    corner_right_path = os.path.join(ASSETS_DIR, "corner_right.png")
 
-        lang_container = tk.Frame(language_frame, bg="#4A646C")
-        lang_container.pack(side="left", padx=10)
+    corner_left = Image.open(corner_left_path).resize((100, 100), Image.Resampling.LANCZOS)
+    corner_right = Image.open(corner_right_path).resize((100, 100), Image.Resampling.LANCZOS)
 
-        tk.Radiobutton(
-            lang_container,
-            image=img,
-            variable=selected_language,
-            value=language_name,
-            bg="#4A646C",
-            indicatoron=False,
-            selectcolor="#4A646C",
-        ).pack()
+    corner_left_img = ImageTk.PhotoImage(corner_left)
+    corner_right_img = ImageTk.PhotoImage(corner_right)
 
-        lang_container.image = img
-        label = tk.Label(
-            lang_container,
-            text=language_name,
-            font=("Arial", 14),
-            bg="#4A646C",
-            fg="white",
-        )
-        label.pack()
+    tk.Label(main_menu_root, image=corner_left_img, bg="#4A646C").place(x=20, y=main_menu_root.winfo_screenheight() - 120)
+    tk.Label(main_menu_root, image=corner_right_img, bg="#4A646C").place(x=main_menu_root.winfo_screenwidth() - 120, y=main_menu_root.winfo_screenheight() - 120)
 
-    # Play button (image)
-    play_image_path = os.path.join(GENERAL_IMAGES_DIR, "play.png")
-    play_image = Image.open(play_image_path).resize((200, 150), Image.Resampling.LANCZOS)
-    play_photo = ImageTk.PhotoImage(play_image)
+    # Keep references to avoid garbage collection
+    main_menu_root.corner_left_img = corner_left_img
+    main_menu_root.corner_right_img = corner_right_img
 
-    play_button = tk.Button(
-        main_container,
-        image=play_photo,
-        command=start_game,
-        bg="#4A646C",
-        relief="flat",
-    )
-    play_button.image = play_photo
-    play_button.pack(pady=5)
-
-    # Add corner images
-    corner_left_path = os.path.join(GENERAL_IMAGES_DIR, "corner_left.png")
-    corner_right_path = os.path.join(GENERAL_IMAGES_DIR, "corner_right.png")
-
-    corner_left = Image.open(corner_left_path).resize((80, 80), Image.Resampling.LANCZOS)
-    corner_left_photo = ImageTk.PhotoImage(corner_left)
-    corner_left_label = tk.Label(main_menu_root, image=corner_left_photo, bg="#4A646C")
-    corner_left_label.place(x=10, y=main_menu_root.winfo_screenheight() - 100)
-
-    corner_right = Image.open(corner_right_path).resize((80, 80), Image.Resampling.LANCZOS)
-    corner_right_photo = ImageTk.PhotoImage(corner_right)
-    corner_right_label = tk.Label(main_menu_root, image=corner_right_photo, bg="#4A646C")
-    corner_right_label.place(x=main_menu_root.winfo_screenwidth() - 100, y=main_menu_root.winfo_screenheight() - 100)
-
-    # Keep references to images
-    main_menu_root.corner_left_photo = corner_left_photo
-    main_menu_root.corner_right_photo = corner_right_photo
-
-    # Run the main menu
     main_menu_root.mainloop()
-
 
 if __name__ == "__main__":
     main_menu()

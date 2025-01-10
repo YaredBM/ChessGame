@@ -119,7 +119,7 @@ def main_menu():
     mode_frame = tk.Frame(main_container, bg="#4A646C")
     mode_frame.pack()
 
-    for mode, file in [("1 VS 1", "1vs1.png"), ("1 VS AI", "1vsAI.png")]:
+    for mode, file in [("1 VS 1", "1vs1.png")]:
         img_path = os.path.join(ASSETS_DIR, file)
         img = Image.open(img_path).resize((230, 130), Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(img)

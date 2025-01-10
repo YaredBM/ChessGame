@@ -49,10 +49,9 @@ Each chess piece will be represented by an image, loaded onto the chessboard usi
 - **Voice**: Voice recognition allows players to issue commands like “Move the pawn from E2 to E4.”
 - **Text input**: Players can type their moves directly into a text input field.
 
-# Game Modes
+# Game Mode
 
 - **Player vs Player**: Two players take turns on the same device.
-- **Player vs AI**: The player competes against a computer opponent that follows basic decision-making strategies.
 
 # Game End
 
@@ -67,7 +66,6 @@ The main classes for this game will include:
 - **Piece**: The base class for all chess pieces, containing attributes like color and position, and defining the basic movement logic for each piece.
 - **Specific piece classes (Pawn, Knight, Rook, etc.)**: These classes inherit from `Piece` and define the movement logic for each type of piece.
 - **Player**: Handles player actions, whether by mouse, keyboard, or voice, and processes their moves.
-- **AI**: Implements the AI logic, allowing the computer to make simple strategic decisions.
 - **InputHandler**: Manages all types of input from the user (mouse, keyboard, voice).
 - **UI**: Responsible for drawing the board, pieces, menus, and game messages to the screen using Tkinter.
 
@@ -142,123 +140,202 @@ style, and language before starting the game.
 Features
 
 1. Game Mode Selection:
-
-Players can choose between:
 - 1 vs 1: Two players compete on the same device.
-- 1 vs AI: A single player competes against an AI opponent.
+- Player Names Input: Before starting a game, players are prompted to enter their names for personalization.
 
-Each mode is represented by an image for easy selection.
+2. Custom Board Styles:
+- Players can choose from multiple board themes:
+Baby, Wood, Spooky, Nightly, and Love styles.
+- Style previews are displayed via visual icons for easy selection.
 
-2. Style Customization:
+3. Language Options:
+- Available languages: English, Spanish, and Turkish.
 
-Players can select from four unique chessboard styles:
-- Baby: A bright and playful design.
-- Wood: A classic wooden look.
-- Spooky: A dark and mysterious theme.
-- Nightly: A sleek and modern aesthetic.
+4. Interactive Menu Design:
+- Fullscreen display for better immersion.
+- Clean, modern UI with responsive design elements.
+- Enhanced by visual decorations and user-friendly icons.
 
-Styles are shown with preview images, allowing players to visualize their choice.
+Technical Implementation
 
-3. Language Selection:
+1. Dynamic Paths:
+- The menu dynamically loads images and assets using relative paths, ensuring compatibility across systems.
 
-The game supports three languages:
-- English
-- Spanish
-- Turkish
+2. Customizable Gameplay:
+- Game configuration (mode, style, and language) is passed directly to the main game logic when the player starts a session.
 
-Players can select their preferred language by clicking on flag icons.
+3. Name Input Window:
+- For 1 vs 1 mode, a separate window prompts players for their names.
+- Names and preferences are transferred to the main game on launch.
 
-4. Start Game Functionality:
-
-Once all selections are made, clicking the "Play" button launches the chess game script (Chess_copy.pyw).
-
-If any selection is missing, a warning message prompts the player to complete the required choices.
-
-5. Enhanced User Interface:
-
-The menu is designed to be fullscreen and uses a consistent theme (#4A646C as the background color) to ensure a polished appearance.
-
-Decorative corner images and responsive button designs enhance the overall user experience.
-
+4. Graphical Enhancements:
+- Integrated with Pillow (PIL) for image scaling and rendering.
+- The menu includes decorative corner images to enhance visual appeal.
 
 How the Code Works
 
-1. Asset Management:
-- Images for game modes, board styles, and languages are loaded dynamically from the assets folder. File paths are handled using the os
-module to ensure compatibility across different operating systems.
+1. Main Menu Initialization (main_menu):
 
-2. Interactive Widgets:
-- The menu uses Tkinter widgets such as Radiobutton, Label, and Frame to create a clean and interactive layout.
-- Buttons are configured to display images, making the interface intuitive and visually engaging.
+- The program starts by calling the main_menu() function, which creates and displays the main window.
+- Tkinter widgets like Frame, Label, and Radiobutton are used to build the user interface for game mode, style, and language selection.
+- Image assets are dynamically loaded from a specified directory using relative paths to ensure portability across systems.
 
-3. Error Handling:
-- The start_game function ensures that players cannot start the game without selecting all required options (mode, style, and
-language). Missing selections trigger a popup warning using a messagebox.
+2. Game Start Process (start_game):
 
-4. Launching the Game:
-- Once selections are complete, the start_game function closes the main menu and launches the chess game (Chess_copy.pyw) using
-subprocess.Popen.
+- Before launching the game, the program checks that all necessary selections (mode, style, and language) are made.
+- If selections are incomplete, a warning prompts the player to complete the setup.
+- In 1 vs 1 mode, a name input window (get_player_names()) prompts players to enter their names before starting the game.
 
+3. Player Names Input (get_player_names):
+- This function dynamically adjusts its interface based on the selected game mode.
+- For 1 vs 1 mode, players are prompted to input names for both players.
+- The subprocess.Popen() function is used to launch the chess game (Chess.pyw) with the selected configurations.
 
-Functions
+4. Menu Enhancements:
+- Decorative elements like corner images are integrated using ImageTk.PhotoImage.
+- Fullscreen mode is achieved with state("zoomed").
 
-1. start_game()
-- This function is called when the "Play" button is clicked. It validates the player's selections and launches the chess game:
+Functions and Their Roles
 
-code: 
+1. main_menu():
 
-    def start_game():
-        if not selected_mode.get() or not selected_style.get() or not selected_language.get():
-            tk.messagebox.showwarning("Missing Selection", "Please select mode, style, and language before starting!")
-            return
-        main_menu_root.destroy()
-        subprocess.Popen(["python", CHESS_COPY_PATH])
+- Creates and displays the main menu window.
+- Handles UI setup for mode, style, and language selection.
+- Manages loading and displaying image assets.
 
-Key Details:
-- Ensures all options (mode, style, language) are selected. Missing selections prompt a warning.
-- Closes the current menu and starts the game script using subprocess.
+2. start_game():
+- Validates that the user has selected game mode, style, and language.
+- Launches the chess game with the selected configurations if inputs are complete.
+- Calls get_player_names() when player names need to be entered.
 
+3. get_player_names(mode):
+- Opens a custom window for entering player names.
+- Dynamically adjusts UI based on the selected game mode.
+- Passes player names, board style, and language to the game startup process.
 
-2. main_menu()
-- This function creates and displays the main menu window, allowing players to select game settings:
+## Game Rules Explanation
 
-Code: 
+The create_window_with_pages() function creates a graphical user interface (GUI) application using Python's tkinter library. The application serves as an interactive information display with multiple pages, each containing an image.
 
-    def main_menu():
-        global main_menu_root, selected_mode, selected_style, selected_language # Create and display the main menu.
-        main_menu_root = tk.Tk()
-        main_menu_root.title("Welcome to Chess")
-        main_menu_root.state("zoomed") # Fullscreen
-        selected_mode, selected_style, selected_language = tk.StringVar(), tk.StringVar(), tk.StringVar()     
-        main_menu_root.mainloop() # GUI setup for game mode, style, and language options...
+Functionality Overview
 
+1. Window Initialization and Centering
 
-Key Details:
-- Initializes the main menu as a fullscreen window.
-- Stores player selections in selected_mode, selected_style, and selected_language variables.
-- Runs the menu in a loop to handle user interactions.
+- The center_window function ensures that the application window is centered on the screen with a slight upward adjustment.
+- The window is set to a fixed size of 900x600 pixels.
 
+2. File Searching
 
-3. if __name__ == "__main__": main_menu()
-- This statement ensures that the script launches the main menu only when it is executed directly:
+- The find_file_recursive function recursively searches for image files in the project directory and its subdirectories.
+- This ensures that the application can locate necessary assets (.png files) even if their exact locations vary.
 
-Code:
+3. Dynamic Image Loading
 
-    if __name__ == "__main__":
-        main_menu()
+- A dictionary, image_files, maps tab names to their corresponding image filenames.
+- Using find_file_recursive, the script dynamically locates each image file, storing their paths in the image_paths dictionary.
+- If a required file is missing, an error message is printed, and the application exits.
 
+4. Main Window Setup
 
-Key Details:
-- When the script is run directly (e.g., python MainMenu.pyw), it calls the main_menu() function to display the menu interface.
-- If the script is imported into another module, this block is skipped, preventing the menu from launching automatically.
+- A tkinter Tk window is created with a title ("Chess Information") and an icon loaded from the assets/Menu/Chess-Logo.ico directory.
 
+5. Tabbed Interface with ttk.Notebook
+- A ttk.Notebook widget creates a tabbed interface, allowing users to switch between pages.
+- Each tab corresponds to a specific category (e.g., "General Chess Rules", "Piece Movements").
 
-Technologies Used
+6. Image Processing and Display
+- Each image is resized to fit the window dimensions (900x600 pixels) using Pillow (PIL) with high-quality resizing
+(Image.Resampling.LANCZOS).
+- A tk.Label widget displays the image, covering the entire tab frame.
 
-1. Tkinter: Used for creating the graphical interface and handling user interactions.
+7. Garbage Collection Management
 
-2. Pillow (PIL): Resizes images for buttons and visual elements.
+- To prevent garbage collection of the images, references are stored in a dictionary and explicitly assigned to the Label widget.
 
-3. Subprocess: Launches the chess game script in a new process.
+8. Event Loop
 
-4. OS Module: Dynamically constructs file paths for compatibility across operating systems.
+- The root.mainloop() call starts the Tkinter event loop, keeping the application window open and responsive.
+
+Use Case
+
+This function is ideal for creating informational applications with an image-based navigation system. The example implementation displays chess-related content, but it can be easily adapted for other purposes by modifying the image_files dictionary.
+
+Key Libraries Used
+
+1. tkinter: For creating the GUI.
+2. ttk: Provides a modern-themed tabbed interface (ttk.Notebook).
+3. Pillow (PIL): For image manipulation and resizing.
+4. os: To handle file paths and directory traversal.
+
+Error Handling
+
+- The script verifies that all required image files are located.
+- If a file is missing, an error message is printed, and the program exits gracefully.
+
+## Chess Game Implementation
+
+This class is responsible for setting up and managing the entire chess game. It handles board rendering, piece management, and game
+state (including saving and loading). The class provides a GUI with buttons for interaction and labels for displaying game status.
+
+Attributes:
+
+- root: The main Tkinter window that holds the chess game.
+- board: The chessboard, which is a grid of 8x8 buttons, each representing a square on the board.
+- style_colors: Defines the color scheme for the squares on the board.
+- squares: A dictionary that maps each square (e.g., "a1", "h8") to a button.
+- white_images and black_images: Dictionaries that store the images for white and black pieces, respectively.
+- selected_language: The language currently selected for the interface.
+- current_language: A dictionary containing all the text used in the interface, such as button labels, messages, and game information.
+
+Methods:
+
+- find_king(self, king):
+Searches for the square where the king piece is currently located by checking the image of each square.
+
+- set_squares(self):
+Creates the chessboard with buttons representing squares. The color alternates based on the square's position, and each square is
+assigned a button with a click command to select pieces.
+
+- import_pieces(self):
+Loads the images for the pieces based on the selected style (white or black pieces) from the corresponding directory.
+
+- set_pieces(self):
+Places the pieces in their default starting positions, including pawns, rooks, knights, bishops, queens, and kings. It also fills the remaining squares with blank images.
+
+- home_action():
+Action triggered when the "Home" menu item is selected. This closes the current window and opens the main menu.
+
+- save_game_action(board, move_log_label, turn_label, player1_name):
+Saves the current game state (board positions, move log, and turn information) to a .pkl file. After saving, the game is automatically restarted.
+
+- load_game_action(board, move_log_label, turn_label):
+Loads a previously saved game state from a .pkl file and restores the board, move log, and other relevant game data.
+
+- restart_game(self, move_log_label, turn_label, player1_name):
+Restarts the game by resetting the board to the initial positions, clearing the move log, and updating the turn label.
+
+- game_rules_action():
+Opens a new window displaying the game rules when the "Game Rules" menu option is selected.
+
+- change_view(mode):
+Switches between Light Mode and Dark Mode for the user interface. This affects the background and text colors of various elements.
+
+- exit_action():
+Closes the game when the "Exit" menu option is selected.
+
+Menu System:
+
+The menu bar provides several options:
+
+- Home: Opens the home screen.
+- Main Menu: Contains options to save, load, and restart the game.
+- Game Rules: Displays a window showing the rules of the game.
+- Change View: Switch between Light and Dark modes.
+- Exit: Closes the game.
+
+User Interface:
+
+- Chessboard: A grid of 8x8 buttons represents the chessboard. Pieces are displayed as images on these buttons.
+- Turn Label: Shows the current player's turn.
+- Move Log Label: Displays the history of moves made during the game.
+- Menu Button: Opens a menu with options for saving, loading, and restarting the game, among others.

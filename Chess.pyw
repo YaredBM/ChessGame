@@ -195,9 +195,128 @@ class Board(tk.Frame):
         messagebox.showinfo("Restart Game", "Game has been restarted!")
 
 
-    def select_piece(self, button): #called when a square button is pressed, consists of majority of the movement code
+    # def select_piece(self, button): #called when a square button is pressed, consists of majority of the movement code
+    #     print("Button clicked:", button)
+    #     print("Button image:", button["image"])
+    #     if self.buttons_pressed == 0:
+    #         if button["image"] in self.white_pieces and self.turns % 2 != 0:
+    #             messagebox.showwarning(current_language["invalid_move"], current_language["invalid_move"])
+    #             return
+    #         elif button["image"] in self.black_pieces and self.turns % 2 == 0:
+    #             messagebox.showwarning(current_language["invalid_move"], current_language["invalid_move"])
+    #             return
+    #         elif button["image"] not in self.white_pieces + self.black_pieces:
+    #             messagebox.showwarning(current_language["invalid_selection"], current_language["invalid_selection"])
+    #             return
+
+    #         # Si la pieza seleccionada es válida, se asigna el color
+    #         if button["image"] in self.white_pieces:
+    #             self.piece_color = "white"
+    #         elif button["image"] in self.black_pieces:
+    #             self.piece_color = "black"
+        
+    #     if (self.piece_color == "white" and self.turns % 2 == 0) or (self.piece_color == "black" and self.turns % 2 == 1) or self.buttons_pressed == 1: #prevents people from moving their pieces when it's not their turn
+    #         if self.buttons_pressed == 0: #stores square and button of first square selected
+    #             self.sq1 = list(self.squares.keys())[list(self.squares.values()).index(button)] #retrieves pos of piece
+    #             self.sq1_button = button
+    #             self.buttons_pressed += 1
+             
+    #         elif self.buttons_pressed==1: #stores square and button of second square selected
+    #             self.sq2 = list(self.squares.keys())[list(self.squares.values()).index(button)]
+    #             self.sq2_button = button
+    #             if self.sq2 == self.sq1: #prevents self-destruction and allows the user to choose a new piece
+    #                 self.buttons_pressed = 0
+    #                 return
+                
+    #             if self.allowed_piece_move() and self.friendly_fire() == False:  # Verifica si el movimiento es válido
+    #                 prev_sq1 = self.sq1
+    #                 prev_sq1_button_piece = self.sq1_button["image"]
+    #                 prev_sq2 = self.sq2
+    #                 prev_sq2_button_piece = self.sq2_button["image"]
+
+    #                 # Realiza el movimiento
+    #                 self.squares[self.sq2].config(image=self.sq1_button["image"])  # Mueve la pieza de sq1 a sq2
+    #                 self.squares[self.sq2].image = self.sq1_button["image"]
+    #                 self.squares[self.sq1].config(image=self.white_images["blank.png"])  # Limpia la posición anterior
+    #                 self.squares[self.sq1].image = self.white_images["blank.png"]
+
+    #                 # Verifica si el rey queda en jaque
+    #                 if self.in_check() == True and self.castled == False:  
+    #                     # Revertir movimiento porque deja al rey en jaque
+    #                     self.squares[prev_sq2].config(image=prev_sq2_button_piece)
+    #                     self.squares[prev_sq2].image = prev_sq2_button_piece
+    #                     self.squares[prev_sq1].config(image=prev_sq1_button_piece)
+    #                     self.squares[prev_sq1].image = prev_sq1_button_piece
+    #                     self.buttons_pressed = 0
+    #                     # messagebox.showwarning("Invalid Move", "This move puts your king in check!")
+    #                     messagebox.showwarning(current_language["invalid_move"], current_language["invalid_move"])
+    #                     return
+
+    #                 # Marca las piezas importantes que han sido movidas (para evitar castling)
+    #                 if prev_sq1_button_piece == "pyimage3":  # Rey blanco
+    #                     self.wk_moved = True
+    #                 if prev_sq1_button_piece == "pyimage10":  # Rey negro
+    #                     self.bk_moved = True
+    #                 if prev_sq1_button_piece == "pyimage7" and prev_sq1 == "a1":  # Torre blanca izquierda
+    #                     self.wr1_moved = True
+    #                 if prev_sq1_button_piece == "pyimage7" and prev_sq1 == "h1":  # Torre blanca derecha
+    #                     self.wr2_moved = True
+    #                 if prev_sq1_button_piece == "pyimage14" and prev_sq1 == "a8":  # Torre negra izquierda
+    #                     self.br1_moved = True
+    #                 if prev_sq1_button_piece == "pyimage14" and prev_sq1 == "h8":  # Torre negra derecha
+    #                     self.br2_moved = True
+
+    #                 self.buttons_pressed = 0  # Reinicia la selección
+
+    #                 # Verificar si hay promoción de peón
+    #                 if (self.sq1_button["image"] == "pyimage5" and prev_sq2.count("8") == 1) or \
+    #                 (self.sq1_button["image"] == "pyimage12" and prev_sq2.count("1") == 1):
+    #                     self.promotion_menu(self.piece_color)
+
+    #                 self.castled = False  # Resetear la bandera de enroque
+
+    #                 # Actualizar el registro de movimientos
+    #                 move_text = f"{prev_sq1.upper()}->{prev_sq2.upper()}"
+    #                 current_log = move_log_label.cget("text").splitlines()
+
+    #                 move_number = (self.turns // 2) + 1  # Número de movimiento
+    #                 player = "White" if self.turns % 2 == 0 else "Black"
+
+    #                 if player == "White":
+    #                     new_line = f"{move_number}. White: {move_text}"
+    #                     current_log.append(new_line)
+    #                 else:
+    #                     current_log[-1] += f" | Black: {move_text}"
+
+    #                 move_log_label.config(text="\n".join(current_log))
+                    
+    #                 if self.in_checkmate():
+    #                     winner = player1_name if self.turns % 2 != 0 else player2_name
+    #                     # messagebox.showinfo("Checkmate", f"Checkmate! {winner} wins!")
+    #                     messagebox.showinfo(current_language["checkmate"], current_language["checkmate"].format(player1_name))
+    #                     self.restart_game()
+    #                     return
+                    
+    #                 # Incrementar el contador de turnos
+    #                 self.turns += 1
+
+    #                 # Actualizar el Turn Label
+    #                 if self.turns % 2 == 0:  # Turno par: Player 1
+    #                     turn_label.config(text=f"{player1_name}'s TURN")
+    #                 else:  # Turno impar: Player 2
+    #                     turn_label.config(text=f"{player2_name}'s TURN")
+    #             else:
+    #                 messagebox.showwarning("Invalid Move", "This move is not allowed for the selected piece.")
+                    
+
+    #         else:
+    #             self.buttons_pressed = 0
+    #             return
+    def select_piece(self, button):  # Called when a square button is pressed, consists of majority of the movement code
         print("Button clicked:", button)
         print("Button image:", button["image"])
+        
+        # First click: Selecting the piece
         if self.buttons_pressed == 0:
             if button["image"] in self.white_pieces and self.turns % 2 != 0:
                 messagebox.showwarning(current_language["invalid_move"], current_language["invalid_move"])
@@ -209,109 +328,113 @@ class Board(tk.Frame):
                 messagebox.showwarning(current_language["invalid_selection"], current_language["invalid_selection"])
                 return
 
-            # Si la pieza seleccionada es válida, se asigna el color
+            # If a valid piece is selected, set the color
             if button["image"] in self.white_pieces:
                 self.piece_color = "white"
             elif button["image"] in self.black_pieces:
                 self.piece_color = "black"
-        
-        if (self.piece_color == "white" and self.turns % 2 == 0) or (self.piece_color == "black" and self.turns % 2 == 1) or self.buttons_pressed == 1: #prevents people from moving their pieces when it's not their turn
-            if self.buttons_pressed == 0: #stores square and button of first square selected
-                self.sq1 = list(self.squares.keys())[list(self.squares.values()).index(button)] #retrieves pos of piece
-                self.sq1_button = button
-                self.buttons_pressed += 1
-             
-            elif self.buttons_pressed==1: #stores square and button of second square selected
-                self.sq2 = list(self.squares.keys())[list(self.squares.values()).index(button)]
-                self.sq2_button = button
-                if self.sq2 == self.sq1: #prevents self-destruction and allows the user to choose a new piece
+
+            # Store the first square's position and button
+            self.sq1 = list(self.squares.keys())[list(self.squares.values()).index(button)]  # Retrieve position of the piece
+            self.sq1_button = button
+            self.buttons_pressed += 1
+
+        # Second click: Selecting the destination square
+        elif self.buttons_pressed == 1:
+            self.sq2 = list(self.squares.keys())[list(self.squares.values()).index(button)]  # Get second square
+            self.sq2_button = button
+
+            if self.sq2 == self.sq1:  # Prevent self-destruction and allow the user to choose a new piece
+                self.buttons_pressed = 0
+                self.sq1 = None
+                self.sq2 = None
+                return
+
+            if self.allowed_piece_move() and not self.friendly_fire():  # Verify if the move is valid
+                prev_sq1 = self.sq1
+                prev_sq1_button_piece = self.sq1_button["image"]
+                prev_sq2 = self.sq2
+                prev_sq2_button_piece = self.sq2_button["image"]
+
+                # Perform the move
+                self.squares[self.sq2].config(image=self.sq1_button["image"])  # Move the piece
+                self.squares[self.sq2].image = self.sq1_button["image"]
+                self.squares[self.sq1].config(image=self.white_images["blank.png"])  # Clear the previous position
+                self.squares[self.sq1].image = self.white_images["blank.png"]
+
+                # Verify if the king is in check after the move
+                if self.in_check() and not self.castled:
+                    # Revert the move if it leaves the king in check
+                    self.squares[prev_sq2].config(image=prev_sq2_button_piece)
+                    self.squares[prev_sq2].image = prev_sq2_button_piece
+                    self.squares[prev_sq1].config(image=prev_sq1_button_piece)
+                    self.squares[prev_sq1].image = prev_sq1_button_piece
+                    messagebox.showwarning(current_language["invalid_move"], current_language["invalid_move"])
                     self.buttons_pressed = 0
+                    self.sq1 = None
+                    self.sq2 = None
                     return
-                
-                if self.allowed_piece_move() and self.friendly_fire() == False:  # Verifica si el movimiento es válido
-                    prev_sq1 = self.sq1
-                    prev_sq1_button_piece = self.sq1_button["image"]
-                    prev_sq2 = self.sq2
-                    prev_sq2_button_piece = self.sq2_button["image"]
 
-                    # Realiza el movimiento
-                    self.squares[self.sq2].config(image=self.sq1_button["image"])  # Mueve la pieza de sq1 a sq2
-                    self.squares[self.sq2].image = self.sq1_button["image"]
-                    self.squares[self.sq1].config(image=self.white_images["blank.png"])  # Limpia la posición anterior
-                    self.squares[self.sq1].image = self.white_images["blank.png"]
+                # Mark important pieces that have moved (to prevent castling)
+                if prev_sq1_button_piece == "pyimage3":  # White king
+                    self.wk_moved = True
+                if prev_sq1_button_piece == "pyimage10":  # Black king
+                    self.bk_moved = True
+                if prev_sq1_button_piece == "pyimage7" and prev_sq1 == "a1":  # White left rook
+                    self.wr1_moved = True
+                if prev_sq1_button_piece == "pyimage7" and prev_sq1 == "h1":  # White right rook
+                    self.wr2_moved = True
+                if prev_sq1_button_piece == "pyimage14" and prev_sq1 == "a8":  # Black left rook
+                    self.br1_moved = True
+                if prev_sq1_button_piece == "pyimage14" and prev_sq1 == "h8":  # Black right rook
+                    self.br2_moved = True
 
-                    # Verifica si el rey queda en jaque
-                    if self.in_check() == True and self.castled == False:  
-                        # Revertir movimiento porque deja al rey en jaque
-                        self.squares[prev_sq2].config(image=prev_sq2_button_piece)
-                        self.squares[prev_sq2].image = prev_sq2_button_piece
-                        self.squares[prev_sq1].config(image=prev_sq1_button_piece)
-                        self.squares[prev_sq1].image = prev_sq1_button_piece
-                        self.buttons_pressed = 0
-                        # messagebox.showwarning("Invalid Move", "This move puts your king in check!")
-                        messagebox.showwarning(current_language["invalid_move"], current_language["invalid_move"])
-                        return
+                # Handle pawn promotion
+                if (self.sq1_button["image"] == "pyimage5" and prev_sq2.count("8") == 1) or \
+                (self.sq1_button["image"] == "pyimage12" and prev_sq2.count("1") == 1):
+                    self.promotion_menu(self.piece_color)
 
-                    # Marca las piezas importantes que han sido movidas (para evitar castling)
-                    if prev_sq1_button_piece == "pyimage3":  # Rey blanco
-                        self.wk_moved = True
-                    if prev_sq1_button_piece == "pyimage10":  # Rey negro
-                        self.bk_moved = True
-                    if prev_sq1_button_piece == "pyimage7" and prev_sq1 == "a1":  # Torre blanca izquierda
-                        self.wr1_moved = True
-                    if prev_sq1_button_piece == "pyimage7" and prev_sq1 == "h1":  # Torre blanca derecha
-                        self.wr2_moved = True
-                    if prev_sq1_button_piece == "pyimage14" and prev_sq1 == "a8":  # Torre negra izquierda
-                        self.br1_moved = True
-                    if prev_sq1_button_piece == "pyimage14" and prev_sq1 == "h8":  # Torre negra derecha
-                        self.br2_moved = True
+                self.castled = False  # Reset castling flag
 
-                    self.buttons_pressed = 0  # Reinicia la selección
+                # Update the move log
+                move_text = f"{prev_sq1.upper()}->{prev_sq2.upper()}"
+                current_log = move_log_label.cget("text").splitlines()
 
-                    # Verificar si hay promoción de peón
-                    if (self.sq1_button["image"] == "pyimage5" and prev_sq2.count("8") == 1) or \
-                    (self.sq1_button["image"] == "pyimage12" and prev_sq2.count("1") == 1):
-                        self.promotion_menu(self.piece_color)
+                move_number = (self.turns // 2) + 1  # Move number
+                white_label = current_language["white"]
+                black_label = current_language["black"]
 
-                    self.castled = False  # Resetear la bandera de enroque
+                if self.turns % 2 == 0:  # Player 1 (White)
+                    new_line = f"{move_number}. {white_label}: {move_text}"
+                    current_log.append(new_line)
+                else:  # Player 2 (Black)
+                    current_log[-1] += f" | {black_label}: {move_text}"
 
-                    # Actualizar el registro de movimientos
-                    move_text = f"{prev_sq1.upper()}->{prev_sq2.upper()}"
-                    current_log = move_log_label.cget("text").splitlines()
+                move_log_label.config(text="\n".join(current_log))
 
-                    move_number = (self.turns // 2) + 1  # Número de movimiento
-                    player = "White" if self.turns % 2 == 0 else "Black"
 
-                    if player == "White":
-                        new_line = f"{move_number}. White: {move_text}"
-                        current_log.append(new_line)
-                    else:
-                        current_log[-1] += f" | Black: {move_text}"
+                # Check if the move caused a checkmate
+                if self.in_checkmate():
+                    winner = player1_name if self.turns % 2 != 0 else player2_name
+                    messagebox.showinfo(current_language["checkmate"], current_language["checkmate"].format(winner))
+                    self.restart_game(move_log_label, turn_label, player1_name)
+                    return
 
-                    move_log_label.config(text="\n".join(current_log))
-                    
-                    if self.in_checkmate():
-                        winner = player1_name if self.turns % 2 != 0 else player2_name
-                        # messagebox.showinfo("Checkmate", f"Checkmate! {winner} wins!")
-                        messagebox.showinfo(current_language["checkmate"], current_language["checkmate"].format(player1_name))
-                        self.restart_game()
-                        return
-                    
-                    # Incrementar el contador de turnos
-                    self.turns += 1
+                # Increment turn counter and update turn label
+                self.turns += 1
 
-                    # Actualizar el Turn Label
-                    if self.turns % 2 == 0:  # Turno par: Player 1
-                        turn_label.config(text=f"{player1_name}'s TURN")
-                    else:  # Turno impar: Player 2
-                        turn_label.config(text=f"{player2_name}'s TURN")
-                else:
-                    messagebox.showwarning("Invalid Move", "This move is not allowed for the selected piece.")
-                    
+                if self.turns % 2 == 0:  # Even turn: Player 1
+                    turn_label.config(text=current_language["turn_label"].format(player1_name))
+                else:  # Odd turn: Player 2
+                    turn_label.config(text=current_language["turn_label"].format(player2_name))
 
             else:
-                self.buttons_pressed = 0
-                return
+                messagebox.showwarning(current_language["invalid_move"], current_language["invalid_move"])
+
+            # Reset after the second click
+            self.buttons_pressed = 0
+            self.sq1 = None
+            self.sq2 = None
 
     def promotion_menu(self, color): #creates menu to choose what piece to change the pawn to
         def return_piece(piece): #function called by buttons to make the change and destroy window
@@ -407,12 +530,15 @@ class Board(tk.Frame):
                 
         
     def allowed_piece_move(self): #checks whether the piece can move to square 2 with respect to their movement capabilities
+
         wb, wk, wn, wp, wq, wr = "pyimage1", "pyimage3", "pyimage4", "pyimage5", "pyimage6", "pyimage7" #redefining pyimages for readability
         bb, bk, bn, bp, bq, br = "pyimage8", "pyimage10", "pyimage11", "pyimage12", "pyimage13", "pyimage14"
 
         if self.sq1_button["image"] == "pyimage2" or self.sq1_button["image"] == "pyimage9": #for when this function is called for check
             return False
-        
+        # Ensure both squares are valid
+        if not self.sq1 or not self.sq2:
+            return False
         if (self.sq1_button["image"] == wb or self.sq1_button["image"] == bb) and self.clear_path("bishop"): #bishop movement        
             if abs(int(self.sq1[1]) - int(self.sq2[1])) == abs(self.ranks.find(self.sq1[0]) - self.ranks.find(self.sq2[0])): #makes sure there is equal change between file and rank movement
                 return True
@@ -545,6 +671,8 @@ class Board(tk.Frame):
                 if self.sq1_button["image"] in self.white_pieces:
                     if self.allowed_piece_move():
                         return True
+        if not self.sq1 or not self.sq2:
+            return False
         return_previous_values()
         return False
     

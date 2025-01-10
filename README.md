@@ -77,7 +77,6 @@ The main menu allows players to customize their gameplay experience with the fol
 
 - # Game Mode Selection:
   - 1 vs 1: Two players compete on the same device.
-  - 1 vs AI: A single player faces an AI opponent.
   - Modes are represented with buttons or icons.
   
 - # Style Customization:
